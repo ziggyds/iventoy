@@ -14,4 +14,5 @@ WORKDIR /app
 COPY --from=init /iventoy/iventoy /app
 RUN chmod +x /app/iventoy.sh
 
-CMD ["/bin/bash", "-c", "bash /iventoy.sh start && sleep infinity"]
+COPY ./entrypoint.sh /entrypoint.sh
+CMD /entrypoint.sh
