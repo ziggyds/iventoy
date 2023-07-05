@@ -52,7 +52,7 @@ jobs:
           labels: |
             IVENTOY=${{ needs.init.outputs.iventoy }}
           build-args: |
-            HEALTHCHECKS=${{ needs.init.outputs.iventoy }}
+            IVENTOY=${{ needs.init.outputs.iventoy }}
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.iventoy }}
