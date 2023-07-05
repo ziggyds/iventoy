@@ -10,9 +10,8 @@ RUN mv iventoy-${IVENTOY} iventoy
 
 FROM alpine:3.18.2
 WORKDIR /app
-
-# Copy and install inventoy
+# Copy iventoy
 COPY --from=init /iventoy/iventoy /app
-RUN chmod +x /app/iventoy
+RUN chmod +x /app/iventoy.sh
 
 CMD ["/bin/bash", "-c", "bash /iventoy.sh start && sleep infinity"]
