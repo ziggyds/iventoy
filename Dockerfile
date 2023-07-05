@@ -15,6 +15,7 @@ COPY --from=init /iventoy/iventoy /app
 RUN chmod +x /app/iventoy.sh
 
 COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Webui
 EXPOSE 26000/tcp
