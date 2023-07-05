@@ -9,7 +9,7 @@ RUN rm -rf iventoy-1.0.07-linux.tar.gz
 RUN mv iventoy-${IVENTOY} iventoy
 
 FROM alpine:3.18.2
-WORKDIR /
+WORKDIR /app
 
 # Copy and install inventoy
 COPY --from=init /iventoy/iventoy /app
