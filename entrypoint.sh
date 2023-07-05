@@ -2,5 +2,5 @@
 #!/bin/sh
 cd /app
 ./iventoy.sh start 
-sleep infinity
-tail -f /iventoy/log/log.txt
+sleep 5
+tail -f log/log.txt

@@ -8,11 +8,16 @@ RUN tar -xvf *.tar.gz
 RUN rm -rf iventoy-1.0.07-linux.tar.gz
 RUN mv iventoy-${IVENTOY} iventoy
 
-FROM alpine:3.18.2
+FROM ubuntu:22.04
 WORKDIR /app
 # Copy iventoy
 COPY --from=init /iventoy/iventoy /app
 RUN chmod +x /app/iventoy.sh
 
 COPY ./entrypoint.sh /entrypoint.sh
+
+# Webui
+EXPOSE 26000/tcp
+# HTTP server
+EXPOSE 16000/tcp
 CMD /entrypoint.sh
