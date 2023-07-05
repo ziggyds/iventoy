@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  iventoy:
+    image: ziggyds/iventoy:latest
+    container_name: iventoy
+    restart: always
+    privileged: true #must be true
+    ports:
+      - 16000:16000
+      - 26000:26000
+    env:
+      IVENTOY_API_ALL=1
+    volumes:
+      - /ISO_PATH:/iventoy/iso
