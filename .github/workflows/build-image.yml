@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
      # Map a step output to a job output
     outputs:
-      iventoy: ${{ steps.healthchecks.outputs.version }}
+      iventoy: ${{ steps.iventoy.outputs.version }}
     steps:    
       - 
         name: check version iventoy
