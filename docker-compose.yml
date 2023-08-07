@@ -17,6 +17,6 @@ services:
       context: .
       dockerfile: Dockerfile
       labels:
-        IVENTOY: 1.0.07
+        IVENTOY: 1.0.17
       args:
-        IVENTOY: 1.0.07
+        IVENTOY: 1.0.17

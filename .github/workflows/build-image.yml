@@ -14,7 +14,7 @@ jobs:
         name: check version iventoy
         id: iventoy
         run: |
-          echo "version=$(echo iventoy-1.0.07-linux.tar.gz | cut -d '-' -f2)" >> $GITHUB_OUTPUT
+          echo "version=$(echo iventoy-1.0.17-linux.tar.gz | cut -d '-' -f2)" >> $GITHUB_OUTPUT
       - 
         name: print
         run: | 
