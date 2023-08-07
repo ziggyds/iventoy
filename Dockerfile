@@ -5,7 +5,7 @@ ARG IVENTOY
 WORKDIR /iventoy
 COPY ./iventoy-1.0.07-linux.tar.gz /iventoy/iventoy-1.0.07-linux.tar.gz
 RUN tar -xvf *.tar.gz
-RUN rm -rf iventoy-1.0.07-linux.tar.gz
+RUN rm -rf iventoy-1.0.17-linux.tar.gz
 RUN mv iventoy-${IVENTOY} iventoy
 
 FROM ubuntu:22.04
