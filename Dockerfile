@@ -1,13 +1,14 @@
-# Get latest iventoy version 
-# y use google drive -_-, it's to easy to use github so we can automate getting the latest versions and build this container
+# Download the latest iventoy version
 FROM ziggyds/alpine-utils:latest AS init
 ARG IVENTOY
 WORKDIR /iventoy
-COPY ./iventoy-1.0.17-linux.tar.gz /iventoy/iventoy-1.0.17-linux.tar.gz
-RUN tar -xvf *.tar.gz
-RUN rm -rf iventoy-1.0.17-linux.tar.gz
-RUN mv iventoy-${IVENTOY} iventoy
+RUN echo ${IVENTOY} && \
+    wget https://github.com/healthchecks/healthchecks/archive/refs/tags/iventoy-${IVENTOY}-linux-free.tar.gz && \
+    tar -xvf *.tar.gz && \
+    rm -rf iventoy-${IVENTOY}-linux.tar.gz && \
+    mv iventoy-${IVENTOY} iventoy
 
+# Build image
 FROM ubuntu:22.04
 WORKDIR /app
 # Copy iventoy

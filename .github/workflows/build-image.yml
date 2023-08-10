@@ -2,6 +2,14 @@ name: Image Build
 on:
   # Manueel starte
   workflow_dispatch:
+    inputs:
+      force_build:
+        description: Force new build?
+        required: false
+        default: "false"
+        type: string
+  schedule: # run daily
+    - cron: '0 0 * * *'
 
 jobs:
   init:
@@ -9,22 +17,39 @@ jobs:
      # Map a step output to a job output
     outputs:
       iventoy: ${{ steps.iventoy.outputs.version }}
-    steps:    
+      buildOrNot: ${{ steps.buildOrNot.outputs.buildOrNot }}
+    steps:
       - 
-        name: check version iventoy
+        name: get latest versions
         id: iventoy
         run: |
-          echo "version=$(echo iventoy-1.0.17-linux.tar.gz | cut -d '-' -f2)" >> $GITHUB_OUTPUT
+          echo "version=$(curl -s https://api.github.com/repos/ventoy/PXE/releases/latest | grep "tag_name" | cut -d'"' -f4)" >> $GITHUB_OUTPUT
+      - # Check labels of the latest image on docker hub
+        name: 
+        id: buildOrNOt
+        env: # if [ -z $FORCE_BUILD ]; then echo "false"; else echo $FORCE_BUILD; fi -> ternary -> ${FORCE_BUILD:-false}
+          FORCE_BUILD: ${{ github.event.inputs.force_build }}
+        run: |
+          repo=${1:-${{ github.repository }}}
+          tag=${2:-latest}
+          token=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" | jq -r '.token')
+          digest=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s "https://registry-1.docker.io/v2/${repo}/manifests/${tag}" | jq -r .config.digest)
+          count=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s -L "https://registry-1.docker.io/v2/${repo}/blobs/${digest}" | jq . | \
+          grep -Ew "IVENTOY" | cut -d'"' -f4 | sed -e "/${{ steps.iventoy.outputs.version }}/d" | wc -l)
+          echo "buildOrNot=$([ ! $count -eq 0 ] && echo "true" || echo "${FORCE_BUILD:-false}")"
       - 
         name: print
         run: | 
           echo ${{ steps.iventoy.outputs.version }}
+          echo ${{ steps.buildOrNot.outputs.buildOrNot }}
 
   docker:
     name: iventoy image
     runs-on: ubuntu-latest
     needs: 
       - init
+    if: |
+      needs.init.outputs.buildOrNot == 'true'
     steps:
       -
         name: init vars
@@ -44,7 +69,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           provenance: false # Breaking change introduced with 3.3.0 https://github.com/docker/build-push-action/releases/tag/v3.3.0, when an image is pushed since that version I can't retrieve the blob with labels anymore based on the digest via registry api, night have to look into an alternative way to do this 
           context: .
@@ -57,3 +82,14 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.iventoy }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+      - 
+        name: tweet new release
+        uses: dart-actions/tweet@v1.0.0
+        with:
+          text: |
+            A new version of cloudflared-healtchecks has been released!
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.healthchecks }}-${{ needs.init.outputs.cloudflared }}
+          consumer-key: ${{ secrets.X_API_KEY }}
+          consumer-secret: ${{ secrets.X_API_KEY_SECRET }}
+          access-token: ${{ secrets.X_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
