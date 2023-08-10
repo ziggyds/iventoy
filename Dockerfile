@@ -3,7 +3,7 @@ FROM ziggyds/alpine-utils:latest AS init
 ARG IVENTOY
 WORKDIR /iventoy
 RUN echo ${IVENTOY} && \
-    wget https://github.com/healthchecks/healthchecks/archive/refs/tags/iventoy-${IVENTOY}-linux-free.tar.gz && \
+    wget https://github.com/ventoy/PXE/releases/download/v${IVENTOY}/iventoy-${IVENTOY}-linux-free.tar.gz && \
     tar -xvf *.tar.gz && \
     rm -rf iventoy-${IVENTOY}-linux.tar.gz && \
     mv iventoy-${IVENTOY} iventoy
