@@ -37,6 +37,7 @@ jobs:
           digest=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s "https://registry-1.docker.io/v2/${repo}/manifests/${tag}" | jq -r .config.digest)
           latest=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s -L "https://registry-1.docker.io/v2/${repo}/blobs/${digest}" | jq . | grep -Ew "IVENTOY" | cut -d'"' -f4)
           echo "buildOrNot=$([ $latest != '${{ steps.iventoy.outputs.version }}' ] && echo "true" || echo "${FORCE_BUILD:-false}")" >> $GITHUB_OUTPUT
+      - 
         name: print
         run: | 
           echo ${{ steps.iventoy.outputs.version }}
