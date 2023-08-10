@@ -23,7 +23,8 @@ jobs:
         name: get latest versions
         id: iventoy
         run: |
-          echo "version=$(curl -s https://api.github.com/repos/ventoy/PXE/releases/latest | grep "tag_name" | cut -d'"' -f4)" >> $GITHUB_OUTPUT
+          version=$(curl -s https://api.github.com/repos/ventoy/PXE/releases/latest | grep "tag_name" | cut -d'"' -f4)
+          echo "version=${version#'v'}"
       - # Check labels of the latest image on docker hub
         name: 
         id: buildOrNOt
@@ -34,9 +35,8 @@ jobs:
           tag=${2:-latest}
           token=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" | jq -r '.token')
           digest=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s "https://registry-1.docker.io/v2/${repo}/manifests/${tag}" | jq -r .config.digest)
-          count=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s -L "https://registry-1.docker.io/v2/${repo}/blobs/${digest}" | jq . | \
-          grep -Ew "IVENTOY" | cut -d'"' -f4 | sed -e "/${{ steps.iventoy.outputs.version }}/d" | wc -l)
-          echo "buildOrNot=$([ ! $count -eq 0 ] && echo "true" || echo "${FORCE_BUILD:-false}")"
+          latest=$(curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" -s -L "https://registry-1.docker.io/v2/${repo}/blobs/${digest}" | jq . | grep -Ew "IVENTOY" | cut -d'"' -f4)
+          echo "buildOrNot=$([ $latest != '${{ steps.iventoy.outputs.version }}' ] && echo "true" || echo "${FORCE_BUILD:-false}")"
       - 
         name: print
         run: | 
