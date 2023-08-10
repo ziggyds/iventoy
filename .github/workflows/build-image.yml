@@ -87,8 +87,8 @@ jobs:
         uses: dart-actions/tweet@v1.0.0
         with:
           text: |
-            A new version of cloudflared-healtchecks has been released!
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.healthchecks }}-${{ needs.init.outputs.cloudflared }}
+            A new iventoy docker image has been released!
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.iventoy }}
           consumer-key: ${{ secrets.X_API_KEY }}
           consumer-secret: ${{ secrets.X_API_KEY_SECRET }}
           access-token: ${{ secrets.X_ACCESS_TOKEN }}
