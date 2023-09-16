@@ -1,6 +1,6 @@
 # iventoy
 
-A docker image running iventoy.
+A Docker image running [iventoy](https://www.iventoy.com).
 
 A github actions workflow runs daily to check if their is a new release.
 
@@ -8,21 +8,25 @@ A github actions workflow runs daily to check if their is a new release.
 
 ## Docker Compose
 
+This does not work with rootless Docker.  The container must be run as root.
+
 ```yaml
 ---
 version: '3.9'
 services:
   iventoy:
-    volumes:
-      - <mount>:<folder>
+    image: ziggyds/iventoy:latest
+    container_name: iventoy
+    restart: always
+    privileged: true #must be true
     ports:
       - 26000:26000
       - 16000:16000
       - 10809:10809
       - 67:67
       - 69:69
-    image: ziggyds/iventoy:latest
-    restart: unless-stopped
+    volumes:
+      - /<path to isos>:/iventoy/iso
 ```
 
 Not necessary to expose all the listed ports.
