@@ -27,6 +27,8 @@ services:
       - 69:69
     volumes:
       - /<path to isos>:/iventoy/iso
+      - /<path to config>:/iventoy/data
+      - /<path to logs>:/iventoy/log
 ```
 
 Not necessary to expose all the listed ports.
