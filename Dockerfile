@@ -10,6 +10,7 @@ RUN echo ${IVENTOY} && \
 
 # Build image
 FROM ubuntu:22.04
+ENV AUTO_START_PXE=true
 WORKDIR /app
 # Copy iventoy
 COPY --from=init /iventoy/iventoy /app
