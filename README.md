@@ -29,6 +29,8 @@ services:
       - /<path to isos>:/iventoy/iso
       - /<path to config>:/iventoy/data
       - /<path to logs>:/iventoy/log
+    environment:
+      - AUTO_START_PXE=true # optional, true by default
 ```
 
 Not necessary to expose all the listed ports.

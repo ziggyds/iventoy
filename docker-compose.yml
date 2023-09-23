@@ -9,14 +9,23 @@ services:
       - 16000:16000
       - 26000:26000
     volumes:
-      - /ISO_PATH:/iventoy/iso
+      - isos:/iventoy/iso
+      - config:/app/data
+    environment:
+      - AUTO_START_PXE=true
     
 
-  iventoy-build:
+  build:
     build:
       context: .
       dockerfile: Dockerfile
       labels:
-        IVENTOY: 1.0.17
+        IVENTOY: 1.0.19
       args:
-        IVENTOY: 1.0.17
+        IVENTOY: 1.0.19
+
+volumes:
+  isos:
+    external: true
+  config:
+    external: true
