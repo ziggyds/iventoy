@@ -23,12 +23,12 @@ services:
       - 26000:26000
       - 16000:16000
       - 10809:10809
-      - 67:67
-      - 69:69
+      - 67:67/udp
+      - 69:69/udp
     volumes:
-      - /<path to isos>:/iventoy/iso
-      - /<path to config>:/iventoy/data
-      - /<path to logs>:/iventoy/log
+      - /<path to isos>:/app/iso
+      - /<path to config>:/app/data
+      - /<path to logs>:/app/log
     environment:
       - AUTO_START_PXE=true # optional, true by default
 ```
