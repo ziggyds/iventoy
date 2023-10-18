@@ -10,6 +10,8 @@ A github actions workflow runs daily to check if their is a new release.
 
 This does not work with rootless Docker.  The container must be run as root.
 
+If you don't plan on using named volumes, as is used in the example below, you'll have to retrieve the files under /app/data from the container.
+
 ```yaml
 ---
 version: '3.9'
@@ -26,11 +28,17 @@ services:
       - 67:67/udp
       - 69:69/udp
     volumes:
-      - /<path to isos>:/app/iso
-      - /<path to config>:/app/data
+      - isos:/app/iso
+      - config:/app/data
       - /<path to logs>:/app/log
     environment:
       - AUTO_START_PXE=true # optional, true by default
+
+volumes:
+  isos:
+    external: true
+  config:
+    external: true
 ```
 
 Not necessary to expose all the listed ports.
