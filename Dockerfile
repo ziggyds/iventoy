@@ -2,7 +2,9 @@
 FROM ziggyds/alpine-utils:latest AS init
 ARG IVENTOY
 WORKDIR /iventoy
-RUN echo ${IVENTOY} && \
+RUN apk add jq && \
+    IVENTOY=$(curl -s https://api.github.com/repos/ventoy/pxe/releases | jq -r 'first(.[].tag_name | select(test("^v[0-9]")))' | cut -c 2-) && \
+    echo ${IVENTOY} && \
     wget https://github.com/ventoy/PXE/releases/download/v${IVENTOY}/iventoy-${IVENTOY}-linux-free.tar.gz && \
     tar -xvf *.tar.gz && \
     rm -rf iventoy-${IVENTOY}-linux.tar.gz && \
