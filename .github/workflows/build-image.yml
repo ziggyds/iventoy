@@ -82,14 +82,3 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.iventoy }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
-      - 
-        name: tweet new release
-        uses: dart-actions/tweet@v1.0.0
-        with:
-          text: |
-            A new iventoy docker image has been released!
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ needs.init.outputs.iventoy }}
-          consumer-key: ${{ secrets.X_API_KEY }}
-          consumer-secret: ${{ secrets.X_API_KEY_SECRET }}
-          access-token: ${{ secrets.X_ACCESS_TOKEN }}
-          access-token-secret: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
