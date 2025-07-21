@@ -21,6 +21,7 @@ services:
     container_name: iventoy
     restart: always
     privileged: true #must be true
+    network_mode: "host"
     ports:
       - 26000:26000
       - 16000:16000
