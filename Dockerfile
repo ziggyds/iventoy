@@ -3,9 +3,9 @@ FROM ziggyds/alpine-utils:latest AS init
 ARG IVENTOY
 WORKDIR /iventoy
 RUN echo ${IVENTOY} && \
-    wget https://github.com/ventoy/PXE/releases/download/v${IVENTOY}/iventoy-${IVENTOY}-linux-free.tar.gz && \
+    wget https://github.com/ventoy/PXE/releases/download/v${IVENTOY}/iventoy-${IVENTOY}-linux-x86_64-free.tar.gz && \
     tar -xvf *.tar.gz && \
-    rm -rf iventoy-${IVENTOY}-linux.tar.gz && \
+    rm -rf iventoy-${IVENTOY}-linux-x86_64-free.tar.gz && \
     mv iventoy-${IVENTOY} iventoy
 
 # Build image
